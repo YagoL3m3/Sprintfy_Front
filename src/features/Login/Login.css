@@ -1,0 +1,72 @@
+/* src/components/LoginForm.css */
+.form-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.login-form {
+    max-width: 400px;
+    width: 100%;
+    margin: auto;
+    padding: 20px;
+    border: 1px solid #000000;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.login-form h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: white;
+}
+
+.form-group {
+    margin-bottom: 15px;
+    color: white;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 8px;
+    box-sizing: border-box;
+}
+
+button {
+    width: 100%;
+    padding: 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+.link-botao {
+    margin-top: 1em;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-decoration: none;
+    color: white;
+    padding: 1em;
+    background-color: #3a0b4e;
+    width: 100%;
+    cursor: pointer;
+    border: none;
+    border-radius: 4px;
+}
+
+.link-botao:hover {
+    background-color: #641499;
+}

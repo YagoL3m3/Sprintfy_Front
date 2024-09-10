@@ -13,6 +13,8 @@ import {
 } from 'react-icons/fa'
 
 import SidebarItem from '../SidebarItem'
+import { Link } from 'react-router-dom';
+import './Sidebar.css'
 
 const Sidebar = ({ active }) => {
 
@@ -31,7 +33,9 @@ const Sidebar = ({ active }) => {
                 <SidebarItem Icon={FaRegCalendarAlt} Text="Calendar" />
                 <SidebarItem Icon={FaIdCardAlt} Text="Employees" />
                 <SidebarItem Icon={FaRegFileAlt} Text="Reports" />
-                <SidebarItem Icon={FaRegSun} Text="Settings" />
+                <Link to="/" className="sidebar-link">
+                    <SidebarItem Icon={FaRegSun} Text="Sair" />
+                </Link>
             </Content>
         </Container>
     )
