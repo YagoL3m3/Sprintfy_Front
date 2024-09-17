@@ -1,0 +1,12 @@
+.Usuario {
+    display: flex;
+    flex-direction: column;
+    margin-left: 1em;
+    padding: 12px;
+    color: white;
+}
+
+.Usuario hr{
+    margin: 2em 0em 2em 0em;
+}
+

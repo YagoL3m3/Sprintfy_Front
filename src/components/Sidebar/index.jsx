@@ -15,6 +15,7 @@ import {
 import SidebarItem from '../SidebarItem'
 import { Link } from 'react-router-dom';
 import './Sidebar.css'
+import User from '../User';
 
 const Sidebar = ({ active }) => {
 
@@ -25,14 +26,10 @@ const Sidebar = ({ active }) => {
     return (
         <Container sidebar={active}>
             <FaTimes onClick={closeSidebar} />
-            <Content>
+            <Content className='Itens'>
+                <User usuario='Brunao' Id='68952707'/>
                 <SidebarItem Icon={FaHome} Text="Menu" />
                 <SidebarItem Icon={FaChartBar} Text="Projetos" />
-                <SidebarItem Icon={FaUserAlt} Text="Users" />
-                <SidebarItem Icon={FaEnvelope} Text="Mail" />
-                <SidebarItem Icon={FaRegCalendarAlt} Text="Calendar" />
-                <SidebarItem Icon={FaIdCardAlt} Text="Employees" />
-                <SidebarItem Icon={FaRegFileAlt} Text="Reports" />
                 <Link to="/" className="sidebar-link">
                     <SidebarItem Icon={FaRegSun} Text="Sair" />
                 </Link>

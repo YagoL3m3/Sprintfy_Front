@@ -1,0 +1,31 @@
+.project-container {
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    padding: 20px;
+    margin: 20px 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    transition: transform 0.3s ease;
+  }
+  
+  .project-container:hover {
+    transform: scale(1.02);
+  }
+  
+  .sprints-container {
+    margin-top: 10px;
+    padding-left: 10px;
+  }
+  
+  .sprints-container ul {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .sprints-container ul li {
+    background-color: #e1e1e1;
+    margin: 5px 0;
+    padding: 10px;
+    border-radius: 5px;
+  }
+  
