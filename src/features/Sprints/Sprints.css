@@ -1,0 +1,9 @@
+.Sprints p {
+    text-align: center;
+    /* Centraliza horizontalmente */
+    margin: 0;
+    /* Remove margens, se necessário */
+    padding: 20px;
+    /* Adicione algum preenchimento, se desejar */
+    color: white;
+}
