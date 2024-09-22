@@ -41,7 +41,7 @@ const LoginForm = () => {
                         />
                     </div>
                     <button type="submit">Login</button>
-                    <Link className='link-botao' to="/Projetos">Login provisorio</Link>
+                    <Link className='link-botao' to="/Menu">Login provisorio</Link>
                 </form>
             </div>
         </div>

@@ -27,9 +27,15 @@ const Sidebar = ({ active }) => {
         <Container sidebar={active}>
             <FaTimes onClick={closeSidebar} />
             <Content className='Itens'>
-                <User usuario='Brunao' Id='68952707'/>
-                <SidebarItem Icon={FaHome} Text="Menu" />
-                <SidebarItem Icon={FaChartBar} Text="Projetos" />
+                <User usuario='Brunao' Id='68952707' />
+                <Link to="/Menu" className="sidebar-link">
+                    <SidebarItem Icon={FaHome} Text="Menu" />
+                </Link>
+
+                <Link to="/Projetos" className="sidebar-link">
+                    <SidebarItem Icon={FaChartBar} Text="Projetos" />
+                </Link>
+
                 <Link to="/" className="sidebar-link">
                     <SidebarItem Icon={FaRegSun} Text="Sair" />
                 </Link>

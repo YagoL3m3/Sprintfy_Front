@@ -5,7 +5,7 @@ import Header from '../../components/Header';
 import Project from '../../components/Project';
 import Fab from '@mui/material/Fab';
 import AddIcon from '@mui/icons-material/Add';
-import {ModalOverlay, ModalContent } from './styles';
+import { ModalOverlay, ModalContent } from './styles';
 import './Projetos.css';
 
 const Projetos = () => {
@@ -16,7 +16,7 @@ const Projetos = () => {
 
   const [newProjectName, setNewProjectName] = useState('');
   const [showModal, setShowModal] = useState(false);
-  
+
   const navigate = useNavigate();
 
   const addProject = (projectName) => {
@@ -65,11 +65,13 @@ const Projetos = () => {
     <div className='Home'>
       <Header addProject={addProject} />
 
-      <div className="project-list">
+      <div className="project-list" style={projects.length === 0
+        ? { display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '70vh', textAlign: 'center', color: 'white' }
+        : {}}>
         {projects.length > 0 ? (
           projects.map((project, index) => (
-            <Draggable 
-              key={index} 
+            <Draggable
+              key={index}
               onStop={(e, data) => handleDrag(e, data, project.name)}
               axis="x"
               bounds={{ left: -200, top: 0, right: 0, bottom: 0 }} // Limita o movimento horizontal

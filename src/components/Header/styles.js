@@ -8,6 +8,7 @@ export const Container = styled.div`
   background-color: #1A202C; 
   box-shadow: 0 0 20px 3px;
   padding: 0 20px;
+  z-index: 1000;
 
   > svg {
     color: white;
@@ -93,7 +94,7 @@ export const ModalOverlay = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 999;
+   z-index: 2000;
 `;
 
 export const ModalContent = styled.div`
@@ -104,6 +105,7 @@ export const ModalContent = styled.div`
   max-width: 500px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   position: relative;
+  z-index: 1500; 
 
   h2 {
     margin-bottom: 20px;

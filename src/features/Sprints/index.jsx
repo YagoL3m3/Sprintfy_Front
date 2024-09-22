@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import Header from '../../components/Header';
-import Sprint from '../../components/Sprints'; // Certifique-se de que este componente existe
+import Sprint from '../../components/Sprints';
 import Fab from '@mui/material/Fab';
 import AddIcon from '@mui/icons-material/Add';
 import { ModalOverlay, ModalContent } from './styles';
 
 const Sprints = () => {
   const { projectName } = useParams();
-  const [sprints, setSprints] = useState([]); // Inicie com um array vazio para sprints
+  const [sprints, setSprints] = useState([]);
   const [newSprintName, setNewSprintName] = useState('');
   const [showModal, setShowModal] = useState(false);
 
@@ -17,7 +17,11 @@ const Sprints = () => {
   const handleCreateSprint = (e) => {
     e.preventDefault();
     if (newSprintName.trim()) {
-      setSprints([...sprints, newSprintName]);
+      const newSprint = {
+        name: newSprintName,
+        createdAt: new Date(), // Certifique-se de que isso está criando um objeto Date válido
+      };
+      setSprints([...sprints, newSprint]);
       setNewSprintName('');
       setShowModal(false);
     }
@@ -26,12 +30,17 @@ const Sprints = () => {
   return (
     <div className='Sprints'>
       <Header projectName={projectName} />
-      
-      <div className="sprint-list">
+
+      <div 
+        className="sprint-list"
+        style={sprints.length === 0 
+          ? { display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '70vh', textAlign: 'center', color: 'white' }
+          : {}}
+      >
         {sprints.length > 0 ? (
           sprints.map((sprint, index) => (
             <div key={index}>
-              <Sprint name={sprint} />
+              <Sprint name={sprint.name} createdAt={sprint.createdAt} />
             </div>
           ))
         ) : (
