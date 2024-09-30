@@ -26,7 +26,7 @@ const Header = ({ addProject, projectName }) => { // Adicione projectName aqui
       <FaBars onClick={toggleSidebar} />
       {sidebar && <Sidebar active={setSidebar} />}
       
-      <h1>{projectName ? `Projeto: ${projectName}` : 'Bem-vindo(a)!'}</h1> {/* Mostra o nome do projeto se disponível */}
+      <h1>{projectName ? `${projectName}` : 'Bem-vindo(a)!'}</h1> {/* Mostra o nome do projeto se disponível */}
 
       {/* Modal */}
       {showModal && (

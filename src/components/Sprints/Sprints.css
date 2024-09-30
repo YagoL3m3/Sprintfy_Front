@@ -1,12 +1,37 @@
-.sprint {
-    background-color: #f9f9f9;
-    border-radius: 8px;
-    padding: 20px;
-    margin: 20px 60px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    cursor: pointer;
-    transition: transform 0.3s ease;
-  }
-  
+.sprint-container {
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  padding: 20px;
+  margin: 20px 60px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  transition: transform 0.3s ease;
+  position: relative; /* Para permitir posicionar o botão dentro do container */
+}
 
-  
+.sprint-container:hover {
+  transform: scale(1.02);
+}
+
+/* Estilo para o botão redondo de edição */
+.edit-button {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background-color: #007bff;
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  transition: background-color 0.3s ease;
+}
+
+.edit-button:hover {
+  background-color: #0056b3;
+}

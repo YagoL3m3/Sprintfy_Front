@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Draggable from 'react-draggable';
 import Header from '../../components/Header';
@@ -9,30 +9,49 @@ import { ModalOverlay, ModalContent } from './styles';
 import './Projetos.css';
 
 const Projetos = () => {
-  const [projects, setProjects] = useState([
-    { name: 'Projeto 1', sprints: ['Sprint 1', 'Sprint 2'], createdAt: new Date() },
-    { name: 'Projeto 2', sprints: ['Sprint A', 'Sprint B'], createdAt: new Date() }
-  ]);
-
+  const [projects, setProjects] = useState([]);
   const [newProjectName, setNewProjectName] = useState('');
   const [showModal, setShowModal] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
+  const [currentProjectIndex, setCurrentProjectIndex] = useState(null);
 
   const navigate = useNavigate();
 
+  const saveProjectsToLocalStorage = (projects) => {
+    localStorage.setItem('projects', JSON.stringify(projects));
+  };
+
+  const loadProjectsFromLocalStorage = () => {
+    const savedProjects = localStorage.getItem('projects');
+    return savedProjects ? JSON.parse(savedProjects) : [];
+  };
+
+  useEffect(() => {
+    const storedProjects = loadProjectsFromLocalStorage();
+    setProjects(storedProjects);
+  }, []);
+
   const addProject = (projectName) => {
-    const newProject = {
-      name: projectName,
-      sprints: [],
-      createdAt: new Date() // Armazena a data atual
-    };
-    setProjects([...projects, newProject]);
+    const newProject = { name: projectName, sprints: [], createdAt: new Date() };
+    const updatedProjects = [...projects, newProject];
+    setProjects(updatedProjects);
+    saveProjectsToLocalStorage(updatedProjects);
+  };
+
+  const updateProject = (projectName) => {
+    const updatedProjects = [...projects];
+    updatedProjects[currentProjectIndex].name = projectName;
+    setProjects(updatedProjects);
+    saveProjectsToLocalStorage(updatedProjects);
   };
 
   const handleDrag = (e, data, projectName) => {
     if (data.x < -100) {
       const confirmed = window.confirm(`Tem certeza que deseja excluir o projeto "${projectName}"?`);
       if (confirmed) {
-        setProjects(projects.filter(project => project.name !== projectName));
+        const updatedProjects = projects.filter(project => project.name !== projectName);
+        setProjects(updatedProjects);
+        saveProjectsToLocalStorage(updatedProjects);
       }
     }
   };
@@ -42,42 +61,43 @@ const Projetos = () => {
   const handleCreateProject = (e) => {
     e.preventDefault();
     if (newProjectName.trim()) {
-      addProject(newProjectName);
+      isEditing ? updateProject(newProjectName) : addProject(newProjectName);
       setNewProjectName('');
+      setIsEditing(false);
       setShowModal(false);
     }
+  };
+
+  const handleEditProject = (index) => {
+    setNewProjectName(projects[index].name);
+    setCurrentProjectIndex(index);
+    setIsEditing(true);
+    setShowModal(true);
   };
 
   const handleProjectClick = (projectName) => {
     navigate(`/projeto/${projectName}`);
   };
 
-  // Função para formatar a data
-  const formatDate = (date) => {
-    return new Intl.DateTimeFormat('pt-BR', {
-      day: '2-digit',
-      month: '2-digit',
-      year: 'numeric'
-    }).format(new Date(date));
-  };
-
   return (
     <div className='Home'>
       <Header addProject={addProject} />
 
-      <div className="project-list" style={projects.length === 0
-        ? { display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '70vh', textAlign: 'center', color: 'white' }
-        : {}}>
+      <div className="project-list" style={projects.length === 0 ? { display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '70vh', textAlign: 'center', color: 'white' } : {}}>
         {projects.length > 0 ? (
           projects.map((project, index) => (
             <Draggable
               key={index}
               onStop={(e, data) => handleDrag(e, data, project.name)}
               axis="x"
-              bounds={{ left: -200, top: 0, right: 0, bottom: 0 }} // Limita o movimento horizontal
+              bounds={{ left: -200, top: 0, right: 0, bottom: 0 }}
             >
-              <div onClick={() => handleProjectClick(project.name)}>
-                <Project project={project} sprints={project.sprints} />
+              <div>
+                <Project
+                  project={project}
+                  onClick={() => handleProjectClick(project.name)}
+                  onEdit={() => handleEditProject(index)}
+                />
               </div>
             </Draggable>
           ))
@@ -96,7 +116,11 @@ const Projetos = () => {
         size="large"
         color="primary"
         aria-label="add"
-        onClick={toggleModal}
+        onClick={() => {
+          setNewProjectName('');
+          setIsEditing(false);
+          toggleModal();
+        }}
       >
         <AddIcon />
       </Fab>
@@ -104,7 +128,7 @@ const Projetos = () => {
       {showModal && (
         <ModalOverlay onClick={toggleModal}>
           <ModalContent onClick={(e) => e.stopPropagation()}>
-            <h2>Novo Projeto</h2>
+            <h2>{isEditing ? 'Editar Projeto' : 'Novo Projeto'}</h2>
             <form onSubmit={handleCreateProject}>
               <label>Nome do Projeto</label>
               <input
@@ -115,7 +139,7 @@ const Projetos = () => {
                 required
               />
               <div>
-                <button type="submit">Criar</button>
+                <button type="submit">{isEditing ? 'Atualizar' : 'Criar'}</button>
                 <button type="button" onClick={toggleModal}>Cancelar</button>
               </div>
             </form>

@@ -1,29 +1,72 @@
-import React, { useState } from 'react';
-import { useParams } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
 import Header from '../../components/Header';
 import Sprint from '../../components/Sprints';
+import Draggable from 'react-draggable';
 import Fab from '@mui/material/Fab';
 import AddIcon from '@mui/icons-material/Add';
 import { ModalOverlay, ModalContent } from './styles';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
 const Sprints = () => {
+  const navigate = useNavigate();
   const { projectName } = useParams();
   const [sprints, setSprints] = useState([]);
   const [newSprintName, setNewSprintName] = useState('');
   const [showModal, setShowModal] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
+  const [currentSprintIndex, setCurrentSprintIndex] = useState(null);
 
   const toggleModal = () => setShowModal(!showModal);
+
+  const saveSprintsToLocalStorage = (sprints) => {
+    localStorage.setItem(`sprints_${projectName}`, JSON.stringify(sprints));
+  };
+
+  const loadSprintsFromLocalStorage = () => {
+    const savedSprints = localStorage.getItem(`sprints_${projectName}`);
+    return savedSprints ? JSON.parse(savedSprints) : [];
+  };
+
+  useEffect(() => {
+    const storedSprints = loadSprintsFromLocalStorage();
+    setSprints(storedSprints);
+  }, [projectName]);
 
   const handleCreateSprint = (e) => {
     e.preventDefault();
     if (newSprintName.trim()) {
       const newSprint = {
         name: newSprintName,
-        createdAt: new Date(), // Certifique-se de que isso está criando um objeto Date válido
+        createdAt: new Date().toISOString(),
       };
-      setSprints([...sprints, newSprint]);
+      const updatedSprints = isEditing
+        ? sprints.map((sprint, index) => (index === currentSprintIndex ? newSprint : sprint))
+        : [...sprints, newSprint];
+
+      setSprints(updatedSprints);
+      saveSprintsToLocalStorage(updatedSprints);
       setNewSprintName('');
       setShowModal(false);
+      setIsEditing(false);
+    }
+  };
+
+  const handleEditSprint = (index) => {
+    setNewSprintName(sprints[index].name);
+    setCurrentSprintIndex(index);
+    setIsEditing(true);
+    setShowModal(true);
+  };
+
+  const handleDrag = (e, data, sprintName) => {
+    if (data.x < -100) {
+      const confirmed = window.confirm(`Tem certeza que deseja excluir a sprint "${sprintName}"?`);
+      if (confirmed) {
+        const updatedSprints = sprints.filter(sprint => sprint.name !== sprintName);
+        setSprints(updatedSprints);
+        saveSprintsToLocalStorage(updatedSprints);
+      }
     }
   };
 
@@ -31,22 +74,48 @@ const Sprints = () => {
     <div className='Sprints'>
       <Header projectName={projectName} />
 
-      <div 
+      <div
         className="sprint-list"
-        style={sprints.length === 0 
+        style={sprints.length === 0
           ? { display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '70vh', textAlign: 'center', color: 'white' }
           : {}}
       >
         {sprints.length > 0 ? (
           sprints.map((sprint, index) => (
-            <div key={index}>
-              <Sprint name={sprint.name} createdAt={sprint.createdAt} />
-            </div>
+            <Draggable
+              key={index}
+              onStop={(e, data) => handleDrag(e, data, sprint.name)}
+              axis="x"
+              bounds={{ left: -200, top: 0, right: 0, bottom: 0 }}
+            >
+              <div>
+                <Sprint
+                  name={sprint.name}
+                  createdAt={sprint.createdAt}
+                  onEdit={() => handleEditSprint(index)} // Passa a função de edição
+                />
+              </div>
+            </Draggable>
           ))
         ) : (
           <p>Nenhuma sprint criada ainda.</p>
         )}
       </div>
+
+      <Fab
+        style={{
+          position: 'fixed',
+          bottom: '20px',
+          left: '20px',
+          zIndex: 1000
+        }}
+        size="large"
+        color="primary"
+        aria-label="back"
+        onClick={() => navigate(-1)}
+      >
+        <ArrowBackIcon />
+      </Fab>
 
       <Fab
         style={{
@@ -58,7 +127,11 @@ const Sprints = () => {
         size="large"
         color="primary"
         aria-label="add"
-        onClick={toggleModal}
+        onClick={() => {
+          setNewSprintName('');
+          setIsEditing(false);
+          toggleModal();
+        }}
       >
         <AddIcon />
       </Fab>
@@ -66,7 +139,7 @@ const Sprints = () => {
       {showModal && (
         <ModalOverlay onClick={toggleModal}>
           <ModalContent onClick={(e) => e.stopPropagation()}>
-            <h2>Nova Sprint</h2>
+            <h2>{isEditing ? 'Editar Sprint' : 'Nova Sprint'}</h2>
             <form onSubmit={handleCreateSprint}>
               <label>Nome da Sprint</label>
               <input
@@ -77,7 +150,7 @@ const Sprints = () => {
                 required
               />
               <div>
-                <button type="submit">Criar</button>
+                <button type="submit">{isEditing ? 'Atualizar' : 'Criar'}</button>
                 <button type="button" onClick={toggleModal}>Cancelar</button>
               </div>
             </form>
