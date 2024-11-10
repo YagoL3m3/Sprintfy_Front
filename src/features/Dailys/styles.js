@@ -158,4 +158,23 @@ export const ModalContent = styled.div`
     display: flex;
     justify-content: space-between;
   }
+
+  @media (max-width: 425px) {
+    /* Reduz o tamanho do modal/formulário */
+    max-width: 90%;  /* Aumenta a largura do formulário para 90% da tela */
+    padding: 15px;   /* Reduz o padding */
+    
+    h2 {
+      font-size: 20px;  /* Ajusta o tamanho do título */
+    }
+
+    input {
+      font-size: 14px;  /* Ajusta o tamanho da fonte do input */
+      padding: 8px;     /* Reduz o padding */
+    }
+
+    button {
+      font-size: 14px;  /* Reduz o tamanho da fonte do botão */
+      padding: 8px 12px; /* Diminui o padding */
+    }
 `;

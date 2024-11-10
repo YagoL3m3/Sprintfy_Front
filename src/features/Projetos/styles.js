@@ -83,6 +83,7 @@ export const Container = styled.div`
 `;
 
 // Modal Styles
+// Modal Styles
 export const ModalOverlay = styled.div`
   position: fixed;
   top: 0;
@@ -109,16 +110,19 @@ export const ModalContent = styled.div`
     margin-bottom: 20px;
     font-size: 24px;
     color: #333;
+    text-align: center;
   }
 
   form {
     display: flex;
     flex-direction: column;
+    margin: 0 20px; /* Adiciona margem ao redor do formulário */
   }
 
   label {
     margin-bottom: 10px;
     color: #555;
+    font-size: 16px;
   }
 
   input {
@@ -138,6 +142,7 @@ export const ModalContent = styled.div`
     border-radius: 4px;
     cursor: pointer;
     font-size: 16px;
+    transition: background-color 0.3s;
 
     &:hover {
       background-color: #0056b3;
@@ -153,9 +158,40 @@ export const ModalContent = styled.div`
     }
   }
 
-  /* Estilo dos botões do formulário */
   div {
     display: flex;
     justify-content: space-between;
+  }
+
+  @media (max-width: 480px) {
+    padding: 15px;
+
+    h2 {
+      font-size: 20px;
+    }
+
+    form {
+      margin: 0 10px; /* Ajuste de margem para telas menores */
+    }
+
+    input {
+      font-size: 14px;
+      padding: 8px;
+    }
+
+    button {
+      font-size: 14px;
+      padding: 10px;
+      width: 100%;
+    }
+
+    div {
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    button[type="button"] {
+      margin-left: 0;
+    }
   }
 `;

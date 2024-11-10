@@ -1,72 +1,89 @@
-/* src/components/LoginForm.css */
+/* Container centralizado */
 .form-container {
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh;
-}
-
-.login-form {
-    max-width: 400px;
-    width: 100%;
-    margin: auto;
     padding: 20px;
-    border: 1px solid #000000;
+    box-sizing: border-box;
+}
+
+/* Card de login */
+.login-card {
+    width: 100%;
+    max-width: 400px;
+    background-color: #fff;
+    padding: 2rem;
     border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
-
-.login-form h2 {
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
     text-align: center;
-    margin-bottom: 20px;
-    color: white;
 }
 
+/* Título do site */
+.site-title {
+    font-family: 'Arial', sans-serif;
+    font-size: 2.5rem;
+    color: #357ABD;
+    margin-bottom: 1.5rem;
+}
+
+/* Grupo de formulários */
 .form-group {
-    margin-bottom: 15px;
-    color: white;
+    margin-bottom: 1rem;
+    text-align: left;
 }
 
+/* Labels e inputs */
 .form-group label {
-    display: block;
-    margin-bottom: 5px;
+    font-size: 0.9rem;
+    color: #555;
 }
 
 .form-group input {
     width: 100%;
-    padding: 8px;
+    padding: 0.75rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 1rem;
+    margin-top: 0.25rem;
     box-sizing: border-box;
 }
 
+/* Botão de login */
 button {
     width: 100%;
-    padding: 10px;
-    background-color: #007bff;
-    color: white;
+    padding: 0.75rem;
+    font-size: 1rem;
+    color: #fff;
+    background-color: #4A90E2;
     border: none;
     border-radius: 4px;
     cursor: pointer;
+    transition: background-color 0.3s ease;
 }
 
 button:hover {
-    background-color: #0056b3;
+    background-color: #357ABD;
 }
 
-.link-botao {
-    margin-top: 1em;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    text-decoration: none;
-    color: white;
-    padding: 1em;
-    background-color: #3a0b4e;
-    width: 100%;
-    cursor: pointer;
-    border: none;
-    border-radius: 4px;
+/* Mensagem de erro */
+.error-message {
+    color: #e74c3c;
+    font-size: 0.875rem;
+    margin-top: 1rem;
 }
 
-.link-botao:hover {
-    background-color: #641499;
+/* Responsividade */
+@media (max-width: 768px) {
+    .login-card {
+        padding: 1.5rem;
+    }
+    
+    .site-title {
+        font-size: 2rem;
+    }
+    
+    h2 {
+        font-size: 1.5rem;
+    }
 }

@@ -1,10 +1,54 @@
 .daily-container {
-    background-color: #f9f9f9;
-    border-radius: 8px;
-    padding: 20px;
-    margin: 20px 60px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    cursor: pointer;
-    transition: transform 0.3s ease;
-  }
-  
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  padding: 20px;
+  margin: 20px 60px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  transition: transform 0.3s ease;
+  position: relative;
+  margin-bottom: 10px;
+}
+
+
+.daily-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.delete-button {
+  background-color: red;
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  transition: background-color 0.3s ease;
+}
+
+.delete-button:hover {
+  background-color: rgb(218, 55, 55);
+}
+
+
+/* Daily.css */
+.delete-button-daily {
+  position: absolute; /* Posiciona o botão em relação ao container */
+  top: 10px; /* Ajuste a posição vertical conforme necessário */
+  right: 10px; /* Posiciona o botão no canto direito */
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 5px;
+}
+
+.delete-button:hover {
+  opacity: 0.7;
+}

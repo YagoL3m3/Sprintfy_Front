@@ -4,7 +4,7 @@ import { FaBars } from 'react-icons/fa';
 import { IoMdAdd } from "react-icons/io";
 import Sidebar from '../Sidebar';
 
-const Header = ({ addProject, projectName }) => { // Adicione projectName aqui
+const Header = ({ addProject, projectName }) => {
   const [sidebar, setSidebar] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [newProjectName, setNewProjectName] = useState('');
@@ -26,7 +26,7 @@ const Header = ({ addProject, projectName }) => { // Adicione projectName aqui
       <FaBars onClick={toggleSidebar} />
       {sidebar && <Sidebar active={setSidebar} />}
       
-      <h1>{projectName ? `${projectName}` : 'Bem-vindo(a)!'}</h1> {/* Mostra o nome do projeto se disponível */}
+      <h1>{projectName ? projectName : 'Bem-vindo(a)!'}</h1> {/* Mostra o nome do projeto se disponível */}
 
       {/* Modal */}
       {showModal && (

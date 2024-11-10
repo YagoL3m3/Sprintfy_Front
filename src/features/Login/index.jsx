@@ -1,23 +1,32 @@
-// src/components/LoginForm.js
 import React, { useState } from 'react';
-import './Login.css'; // Importar o arquivo de estilos
-import { Link } from 'react-router-dom';
-import { Container } from 'react-bootstrap';
+import './Login.css';
+import { useNavigate } from 'react-router-dom';
+import { auth } from '../../firebaseConfig';
+import { signInWithEmailAndPassword } from "firebase/auth";
 
 const LoginForm = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [error, setError] = useState('');
+    const navigate = useNavigate();
 
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault();
-        // Aqui você pode adicionar a lógica de autenticação
-        console.log('Email:', email);
-        console.log('Password:', password);
+        setError('');
+
+        try {
+            await signInWithEmailAndPassword(auth, email, password);
+            navigate('/Menu');
+        } catch (error) {
+            console.error("Erro ao fazer login:", error);
+            setError(`Erro: ${error.message}`);
+        }
     };
 
     return (
-        <div className='form-container'>
-            <div className="login-form">
+        <div className="form-container">
+            <div className="login-card">
+                <h1 className="site-title">Sprintify</h1>
                 <h2>Login</h2>
                 <form onSubmit={handleSubmit}>
                     <div className="form-group">
@@ -31,7 +40,7 @@ const LoginForm = () => {
                         />
                     </div>
                     <div className="form-group">
-                        <label htmlFor="password">Password:</label>
+                        <label htmlFor="password">Senha:</label>
                         <input
                             type="password"
                             id="password"
@@ -40,9 +49,9 @@ const LoginForm = () => {
                             required
                         />
                     </div>
-                    <button type="submit">Login</button>
-                    <Link className='link-botao' to="/Menu">Login provisorio</Link>
+                    <button type="submit">Entrar</button>
                 </form>
+                {error && <p className="error-message">{error}</p>}
             </div>
         </div>
     );

@@ -1,0 +1,78 @@
+/* CriarUsuario.css */
+
+.container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh; /* Ocupa a altura total da tela */
+    background-color: #1A202C; /* Cor de fundo escura */
+}
+
+.form {
+    background: #2D3748; /* Fundo do formulário */
+    border-radius: 8px; /* Bordas arredondadas */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3); /* Sombra suave */
+    padding: 20px;
+    width: 300px; /* Largura fixa do formulário */
+}
+
+h1 {
+    font-size: 24px; /* Tamanho da fonte do título */
+    margin-bottom: 20px; /* Espaço abaixo do título */
+    color: white; /* Cor do texto do título */
+}
+
+.label {
+    margin-bottom: 5px; /* Espaço abaixo do rótulo */
+    font-weight: bold; /* Rótulo em negrito */
+    color: white; /* Cor do texto do rótulo */
+}
+
+.input, .select {
+    width: 100%; /* Largura total do campo de entrada */
+    padding: 10px; /* Espaçamento interno */
+    margin-bottom: 15px; /* Espaço abaixo do campo */
+    border: 1px solid #4A5568; /* Borda suave */
+    border-radius: 4px; /* Bordas arredondadas */
+    background-color: #2D3748; /* Fundo do campo de entrada */
+    color: white; /* Cor do texto */
+}
+
+.input:focus, .select:focus {
+    border-color: #63B3ED; /* Cor da borda quando o campo está em foco */
+    outline: none; /* Remove contorno padrão do foco */
+}
+
+.button {
+    width: 100%; /* Largura total do botão */
+    padding: 10px; /* Espaçamento interno do botão */
+    background-color: #3182CE; /* Cor de fundo do botão */
+    color: white; /* Cor do texto do botão */
+    border: none; /* Remove borda padrão */
+    border-radius: 4px; /* Bordas arredondadas do botão */
+    cursor: pointer; /* Muda o cursor ao passar sobre o botão */
+    font-size: 16px; /* Tamanho da fonte do botão */
+}
+
+.button:hover {
+    background-color: #2B6CB0; /* Cor de fundo ao passar o mouse */
+}
+
+.error {
+    color: #F56565; /* Cor vermelha para mensagens de erro */
+    margin-bottom: 15px; /* Espaço abaixo da mensagem de erro */
+}
+
+.back-link {
+    text-decoration: none; /* Remove sublinhado */
+    color: white; /* Cor da seta */
+    font-size: 24px; /* Tamanho da fonte da seta */
+    margin-bottom: 20px; /* Espaço abaixo da seta */
+    display: flex; /* Centraliza a seta se necessário */
+    align-items: center; /* Centraliza verticalmente */
+}
+
+.back-arrow {
+    margin-right: 8px; /* Espaço à direita da seta */
+}

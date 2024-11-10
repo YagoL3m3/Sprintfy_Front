@@ -5,21 +5,24 @@ import Projetos from './features/Projetos';
 import Menu from './features/Menu';
 import Sprints from './features/Sprints';
 import Daily from './features/Dailys';
- // Importe o novo componente
+import CriarUsuario from './features/CriarUsuario'; 
+import { AuthProvider } from './authContext'; // Importação do AuthProvider
 
 function App() {
   return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<Login />} />
-        <Route path='/Menu' element={<Menu/>}/>
-        <Route path='/Projetos' element={<Projetos/>}/>
-        {/* Adicione a rota dinâmica para o projeto */}
-        <Route path='/projeto/:projectName' element={<Sprints/>} /> 
-        <Route path="/sprint/:sprintName" element={<Daily/>} />
-        <Route path="*" element={<h1>404 - Not Found</h1>} />
-      </Routes>
-    </Router>
+    <AuthProvider> {/* Envolvendo o Router com o AuthProvider */}
+      <Router>
+        <Routes>
+          <Route path="/" element={<Login />} />
+          <Route path="/Menu" element={<Menu />} />
+          <Route path="/Projetos" element={<Projetos />} />
+          <Route path="/projeto/:projectId/sprints" element={<Sprints />} />
+          <Route path="/projeto/:projectId/sprints/:sprintId/dailys" element={<Daily />} />
+          <Route path="/criar-usuario" element={<CriarUsuario />} /> 
+          <Route path="*" element={<h1>404 - Not Found</h1>} />
+        </Routes>
+      </Router>
+    </AuthProvider>
   );
 }
 

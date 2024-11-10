@@ -1,9 +1,8 @@
-.no-sprints-message {
+.no-dailys-message{
     display: flex;
     justify-content: center;
     align-items: center;
     min-height: 70vh; /* Altura mínima para centralizar verticalmente */
     text-align: center;
-    color: white; /* Define a cor do texto como branca */ 
-  }
-  
+    color: white; 
+}

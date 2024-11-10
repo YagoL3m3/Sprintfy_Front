@@ -1,3 +1,6 @@
+/* Estilos para a tela de Sprints */
+
+/* Container do Sprint */
 .sprint-container {
   background-color: #f9f9f9;
   border-radius: 8px;
@@ -6,18 +9,36 @@
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   cursor: pointer;
   transition: transform 0.3s ease;
-  position: relative; /* Para permitir posicionar o botão dentro do container */
+  position: relative;
 }
 
 .sprint-container:hover {
   transform: scale(1.02);
 }
 
-/* Estilo para o botão redondo de edição */
-.edit-button {
+/* Cabeçalho do Sprint */
+.sprint-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+/* Container dos botões de editar e excluir */
+.sprint-buttons-container {
+  display: flex;
+  gap: 8px;
   position: absolute;
-  top: 15px;
-  right: 15px;
+  top: 50%;
+  /* Centraliza verticalmente */
+  right: 10px;
+  transform: translateY(-50%);
+  justify-content: center;
+  align-items: center;
+}
+
+/* Estilo dos botões de editar e excluir */
+.sprint-buttons-container .edit-button {
   background-color: #007bff;
   border: none;
   border-radius: 50%;
@@ -32,6 +53,62 @@
   transition: background-color 0.3s ease;
 }
 
-.edit-button:hover {
+.sprint-buttons-container .delete-button {
+  background-color: red;
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  transition: background-color 0.3s ease;
+}
+
+.sprint-buttons-container .edit-button:hover{
   background-color: #0056b3;
+}
+
+.sprint-buttons-container .delete-button:hover {
+  background-color: rgb(218, 55, 55);
+}
+
+/* Estilos específicos para a lista de sprints */
+.sprints-container {
+  margin-top: 10px;
+  padding-left: 10px;
+}
+
+.sprints-container ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.sprints-container ul li {
+  background-color: #e1e1e1;
+  margin: 5px 0;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+
+/* Responsividade para telas pequenas */
+@media (max-width: 425px) {
+  .sprint-header {
+    flex-direction: column-reverse;  /* Exibe os elementos em coluna */
+    align-items: flex-start; /* Alinha os itens à esquerda */
+  }
+
+  /* Ajustes para o container dos botões da sprint em telas pequenas */
+  .sprint-buttons-container {
+    position: static;   /* Tira a posição absoluta */
+    margin-top: 10px;    /* Espaço entre os botões e outros elementos */
+    transform: none;
+    flex-direction: row; /* Deixa os botões lado a lado */
+    justify-content: flex-start;
+    gap: 10px;
+  }
 }

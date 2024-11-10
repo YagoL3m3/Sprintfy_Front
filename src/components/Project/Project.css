@@ -1,3 +1,6 @@
+/* Estilos para a tela de Projetos */
+
+/* Container do Projeto */
 .project-container {
   background-color: #f9f9f9;
   border-radius: 8px;
@@ -6,35 +9,36 @@
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   cursor: pointer;
   transition: transform 0.3s ease;
-  position: relative; /* Para permitir posicionar o botão dentro do container */
+  position: relative;
 }
 
 .project-container:hover {
   transform: scale(1.02);
 }
 
-.sprints-container {
-  margin-top: 10px;
-  padding-left: 10px;
+/* Cabeçalho do Projeto */
+.project-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
 }
 
-.sprints-container ul {
-  list-style-type: none;
-  padding: 0;
-}
-
-.sprints-container ul li {
-  background-color: #e1e1e1;
-  margin: 5px 0;
-  padding: 10px;
-  border-radius: 5px;
-}
-
-/* Estilo para o botão redondo de edição */
-.edit-button {
+/* Container dos botões de editar e excluir */
+.project-buttons-container {
+  display: flex;
+  gap: 8px;
   position: absolute;
-  top: 15px;
+  top: 50%; /* Centraliza verticalmente */
   right: 15px;
+  transform: translateY(-50%);
+  justify-content: center;
+  align-items: center;
+}
+
+/* Estilo dos botões de editar e excluir */
+.project-buttons-container .edit-button,
+.project-buttons-container .delete-button {
   background-color: #007bff;
   border: none;
   border-radius: 50%;
@@ -49,6 +53,48 @@
   transition: background-color 0.3s ease;
 }
 
-.edit-button:hover {
+.project-buttons-container .delete-button{
+  background-color: red;
+}
+
+.project-buttons-container .edit-button:hover {
   background-color: #0056b3;
+}
+
+.project-buttons-container .delete-button:hover{
+  background-color: rgb(218, 55, 55);
+}
+
+/* Estilos adicionais para a tela de Projetos */
+
+
+.buttons-container {
+  display: flex;
+  gap: 8px; /* Espaçamento entre os botões */
+  position: absolute;
+  top: 15px;
+  right: 15px;
+}
+
+
+.edit-button:hover, .delete-button:hover {
+  background-color: #0056b3;
+}
+
+
+@media (max-width: 425px) {
+  .project-header {
+    flex-direction: column-reverse;
+    align-items: flex-start;
+  }
+
+  /* Ajustes para o container dos botões da sprint em telas pequenas */
+  .project-buttons-container {
+    position: static;
+    margin-top: 10px;
+    transform: none;
+    flex-direction: row;
+    justify-content: flex-end;
+    gap: 10px;
+  }
 }

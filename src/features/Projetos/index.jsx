@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Draggable from 'react-draggable';
+import { useAuth } from '../../authContext'; // Supondo que tenha um contexto de autenticação configurado
 import Header from '../../components/Header';
 import Project from '../../components/Project';
 import Fab from '@mui/material/Fab';
 import AddIcon from '@mui/icons-material/Add';
 import { ModalOverlay, ModalContent } from './styles';
 import './Projetos.css';
+import { firestore } from '../../firebaseConfig';
+import { collection, addDoc, deleteDoc, updateDoc, onSnapshot, doc, query, where, getDocs } from 'firebase/firestore';
 
 const Projetos = () => {
   const [projects, setProjects] = useState([]);
@@ -14,45 +16,86 @@ const Projetos = () => {
   const [showModal, setShowModal] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [currentProjectIndex, setCurrentProjectIndex] = useState(null);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   const navigate = useNavigate();
+  const { user, isAdmin } = useAuth(); // Contexto de autenticação que fornece user e isAdmin
+  const userId = user?.uid;
 
-  const saveProjectsToLocalStorage = (projects) => {
-    localStorage.setItem('projects', JSON.stringify(projects));
-  };
-
-  const loadProjectsFromLocalStorage = () => {
-    const savedProjects = localStorage.getItem('projects');
-    return savedProjects ? JSON.parse(savedProjects) : [];
-  };
-
+  // Carregar projetos do Firestore em tempo real
   useEffect(() => {
-    const storedProjects = loadProjectsFromLocalStorage();
-    setProjects(storedProjects);
+    const unsubscribe = onSnapshot(collection(firestore, 'projects'), (snapshot) => {
+      const projectsData = snapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+      setProjects(projectsData);
+    });
+
+    return () => unsubscribe(); // Limpa o listener
   }, []);
 
-  const addProject = (projectName) => {
-    const newProject = { name: projectName, sprints: [], createdAt: new Date() };
-    const updatedProjects = [...projects, newProject];
-    setProjects(updatedProjects);
-    saveProjectsToLocalStorage(updatedProjects);
+  const addProject = async (projectName) => {
+    const newProject = {
+      name: projectName,
+      createdAt: new Date(),
+      createdBy: userId, // Registra o usuário criador
+    };
+
+    try {
+      await addDoc(collection(firestore, 'projects'), newProject);
+      setNewProjectName('');
+      setShowModal(false);
+    } catch (error) {
+      console.error("Erro ao criar projeto: ", error);
+    }
   };
 
-  const updateProject = (projectName) => {
-    const updatedProjects = [...projects];
-    updatedProjects[currentProjectIndex].name = projectName;
-    setProjects(updatedProjects);
-    saveProjectsToLocalStorage(updatedProjects);
-  };
+  const updateProject = async (projectId, updatedName) => {
+    const project = projects.find((p) => p.id === projectId);
 
-  const handleDrag = (e, data, projectName) => {
-    if (data.x < -100) {
-      const confirmed = window.confirm(`Tem certeza que deseja excluir o projeto "${projectName}"?`);
-      if (confirmed) {
-        const updatedProjects = projects.filter(project => project.name !== projectName);
-        setProjects(updatedProjects);
-        saveProjectsToLocalStorage(updatedProjects);
+    // Verifica se o usuário atual é o criador do projeto ou um administrador
+    if (project && (project.createdBy === userId || isAdmin)) {
+      try {
+        const projectRef = doc(firestore, 'projects', projectId);
+        await updateDoc(projectRef, { name: updatedName });
+        console.log('Projeto atualizado com sucesso!');
+      } catch (error) {
+        console.error('Erro ao atualizar projeto: ', error);
       }
+    } else {
+      console.error("Você não tem permissão para editar este projeto.");
+    }
+  };
+
+  const deleteProject = async (projectId) => {
+    const project = projects.find((p) => p.id === projectId);
+
+    // Verifica se o usuário atual é o criador do projeto ou um administrador
+    if (project && (project.createdBy === userId || isAdmin)) {
+      try {
+        // Deletar as sprints relacionadas ao projeto
+        const sprintsQuery = query(collection(firestore, 'sprints'), where('projectId', '==', projectId));
+        const sprintsSnapshot = await getDocs(sprintsQuery);
+        sprintsSnapshot.forEach(async (doc) => {
+          await deleteDoc(doc.ref);
+        });
+
+        // Deletar as dailys relacionadas ao projeto
+        const dailysQuery = query(collection(firestore, 'dailys'), where('projectId', '==', projectId));
+        const dailysSnapshot = await getDocs(dailysQuery);
+        dailysSnapshot.forEach(async (doc) => {
+          await deleteDoc(doc.ref);
+        });
+
+        // Finalmente, deletar o projeto em si
+        await deleteDoc(doc(firestore, 'projects', projectId));
+        console.log('Projeto e documentos relacionados deletados com sucesso!');
+      } catch (error) {
+        console.error('Erro ao deletar projeto e documentos relacionados: ', error);
+      }
+    } else {
+      console.error("Você não tem permissão para deletar este projeto.");
     }
   };
 
@@ -61,7 +104,11 @@ const Projetos = () => {
   const handleCreateProject = (e) => {
     e.preventDefault();
     if (newProjectName.trim()) {
-      isEditing ? updateProject(newProjectName) : addProject(newProjectName);
+      if (isEditing) {
+        updateProject(projects[currentProjectIndex].id, newProjectName);
+      } else {
+        addProject(newProjectName);
+      }
       setNewProjectName('');
       setIsEditing(false);
       setShowModal(false);
@@ -69,14 +116,34 @@ const Projetos = () => {
   };
 
   const handleEditProject = (index) => {
-    setNewProjectName(projects[index].name);
-    setCurrentProjectIndex(index);
-    setIsEditing(true);
-    setShowModal(true);
+    const project = projects[index];
+    if (project.createdBy === userId || isAdmin) {
+      setNewProjectName(projects[index].name);
+      setCurrentProjectIndex(index);
+      setIsEditing(true);
+      setShowModal(true);
+    } else {
+      console.error("Você não tem permissão para editar este projeto.");
+    }
   };
 
-  const handleProjectClick = (projectName) => {
-    navigate(`/projeto/${projectName}`);
+  const handleDeleteProject = (index) => {
+    const project = projects[index];
+    if (project.createdBy === userId || isAdmin) {
+      const confirmed = window.confirm(`Tem certeza que deseja excluir o projeto "${project.name}"?`);
+      if (confirmed) {
+        deleteProject(project.id);
+      }
+    } else {
+      console.error("Você não tem permissão para excluir este projeto.");
+    }
+  };
+
+  const handleProjectClick = (projectId) => {
+    if (!isDeleting) {
+      navigate(`/projeto/${projectId}/sprints`); // Mude para usar projectId
+    }
+    setIsDeleting(false);
   };
 
   return (
@@ -86,20 +153,16 @@ const Projetos = () => {
       <div className="project-list" style={projects.length === 0 ? { display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '70vh', textAlign: 'center', color: 'white' } : {}}>
         {projects.length > 0 ? (
           projects.map((project, index) => (
-            <Draggable
-              key={index}
-              onStop={(e, data) => handleDrag(e, data, project.name)}
-              axis="x"
-              bounds={{ left: -200, top: 0, right: 0, bottom: 0 }}
-            >
-              <div>
-                <Project
-                  project={project}
-                  onClick={() => handleProjectClick(project.name)}
-                  onEdit={() => handleEditProject(index)}
-                />
-              </div>
-            </Draggable>
+            <div key={project.id}>
+              <Project
+                project={project}
+                onClick={() => handleProjectClick(project.id)} // Passa o ID do projeto
+                onEdit={() => handleEditProject(index)}
+                onDelete={() => handleDeleteProject(index)} // Passa a função de excluir
+                showEditButton={project.createdBy === userId || isAdmin} // Exibe o botão de editar somente para criador ou admin
+                showDeleteButton={project.createdBy === userId || isAdmin} // Exibe o botão de excluir somente para criador ou admin
+              />
+            </div>
           ))
         ) : (
           <p>Nenhum projeto criado ainda.</p>
