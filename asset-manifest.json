@@ -1,15 +1,15 @@
 {
   "files": {
-    "main.css": "/YagoL3m3/Sprintfy_Front/static/css/main.2e8b51f6.css",
-    "main.js": "/YagoL3m3/Sprintfy_Front/static/js/main.0afc7263.js",
-    "static/js/453.d286ede4.chunk.js": "/YagoL3m3/Sprintfy_Front/static/js/453.d286ede4.chunk.js",
-    "index.html": "/YagoL3m3/Sprintfy_Front/index.html",
-    "main.2e8b51f6.css.map": "/YagoL3m3/Sprintfy_Front/static/css/main.2e8b51f6.css.map",
-    "main.0afc7263.js.map": "/YagoL3m3/Sprintfy_Front/static/js/main.0afc7263.js.map",
-    "453.d286ede4.chunk.js.map": "/YagoL3m3/Sprintfy_Front/static/js/453.d286ede4.chunk.js.map"
+    "main.css": "/Sprintify/static/css/main.2e8b51f6.css",
+    "main.js": "/Sprintify/static/js/main.c6bb50f2.js",
+    "static/js/453.d286ede4.chunk.js": "/Sprintify/static/js/453.d286ede4.chunk.js",
+    "index.html": "/Sprintify/index.html",
+    "main.2e8b51f6.css.map": "/Sprintify/static/css/main.2e8b51f6.css.map",
+    "main.c6bb50f2.js.map": "/Sprintify/static/js/main.c6bb50f2.js.map",
+    "453.d286ede4.chunk.js.map": "/Sprintify/static/js/453.d286ede4.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.2e8b51f6.css",
-    "static/js/main.0afc7263.js"
+    "static/js/main.c6bb50f2.js"
   ]
 }
