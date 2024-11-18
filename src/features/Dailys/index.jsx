@@ -144,20 +144,29 @@ const Daily = () => {
       if (isEditing) {
         updateDaily(currentDailyId, newDaily);
       } else {
-        addDaily(newDaily);
+        addDaily(newDaily);  // Adiciona a nova daily
       }
-      setNewDaily({ name: '', description: '', activities: 0, team: 0, communication: 0, delivery: 0 });
-      setIsEditing(false);
-      setShowModal(false);
+      setNewDaily({ name: '', description: '', activities: 0, team: 0, communication: 0, delivery: 0 });  // Limpa os campos após a ação
+      setIsEditing(false);  // Redefine para evitar erros ao alternar para edição
+      setShowModal(false);  // Fecha o modal após salvar
+    } else {
+      // Exibe um erro caso o nome não seja informado
+      alert('Por favor, informe um nome para a daily!');
     }
   };
 
-  // Exibir modal de visualização/edição
+  // Exibir modal de edição
   const handleEditClick = (daily) => {
     setNewDaily(daily);
     setCurrentDailyId(daily.id);
     setIsEditing(hasPermission);  // Permite edição apenas para criador ou admin
     setShowModal(true);
+  };
+
+  const handleCreateNewDaily = () => {
+    setIsEditing(false);  // Garantir que estamos em modo de criação
+    setNewDaily({ name: '', description: '', activities: 0, team: 0, communication: 0, delivery: 0 });  // Limpar os campos
+    setShowModal(true);  // Exibir o modal para criar a nova daily
   };
 
   return (
@@ -176,27 +185,43 @@ const Daily = () => {
 
       <div className="daily-list">
         {dailys.length > 0 ? (
-          dailys.map((daily) => (
-            <div key={daily.id}>
-              <DailyComponent
-                id={daily.id}
-                name={daily.name}
-                description={daily.description}
-                activities={daily.activities}
-                team={daily.team}
-                communication={daily.communication}
-                delivery={daily.delivery}
-                createdAt={daily.createdAt}
-                onEdit={() => handleEditClick(daily)}
-                onDelete={hasPermission ? () => deleteDaily(daily.id) : null}  // Botão de exclusão só aparece para quem tem permissão
-                isEditable={hasPermission}
-              />
-            </div>
-          ))
+          dailys.map((daily) => {
+            const isCreator = daily.createdBy === currentUserId;
+
+            return (
+              <div key={daily.id} className="daily-item">
+                {isCreator || hasPermission ? (
+                  <DailyComponent
+                    id={daily.id}
+                    name={daily.name}
+                    description={daily.description}
+                    activities={daily.activities}
+                    team={daily.team}
+                    communication={daily.communication}
+                    delivery={daily.delivery}
+                    createdAt={daily.createdAt}
+                    onEdit={() => handleEditClick(daily)}
+                    onDelete={hasPermission ? () => deleteDaily(daily.id) : null}
+                    isEditable={hasPermission}
+                  />
+                ) : (
+                  <div className="daily-view-only">
+                    <h3>{daily.name}</h3>
+                    <p><strong>Descrição:</strong> {daily.description}</p>
+                    <p><strong>Atividades:</strong> {daily.activities}</p>
+                    <p><strong>Equipe:</strong> {daily.team}</p>
+                    <p><strong>Comunicação:</strong> {daily.communication}</p>
+                    <p><strong>Entrega:</strong> {daily.delivery}</p>
+                  </div>
+                )}
+              </div>
+            );
+          })
         ) : (
           <p className="no-dailys-message">Nenhuma daily criada ainda.</p>
         )}
       </div>
+
 
       {hasPermission && (
         <Fab
@@ -204,68 +229,72 @@ const Daily = () => {
           color="primary"
           size="large"
           aria-label="add"
-          onClick={() => {
-            setIsEditing(true);  // Garantir que o formulário permita edição
-            setNewDaily({ name: '', description: '', activities: 0, team: 0, communication: 0, delivery: 0 });
-            setShowModal(true);
-          }}
+          onClick={() => handleCreateNewDaily()}
         >
           <AddIcon />
         </Fab>
-
       )}
 
       {showModal && (
         <ModalOverlay onClick={toggleModal}>
           <ModalContent onClick={(e) => e.stopPropagation()}>
-            <h2>{isEditing ? 'Editar Daily' : 'Visualizar Daily'}</h2>
-            <form onSubmit={isEditing ? handleCreateDaily : (e) => e.preventDefault()}>
+            <form onSubmit={handleCreateDaily}>
               <label>Nome da Daily</label>
               <input
                 type="text"
                 value={newDaily.name}
                 onChange={(e) => setNewDaily({ ...newDaily, name: e.target.value })}
                 required
-                disabled={!isEditing}  // Permite edição apenas se isEditing for true
+              // Desabilita se estiver visualizando
               />
               <label>Descrição</label>
               <textarea
                 value={newDaily.description}
                 onChange={(e) => setNewDaily({ ...newDaily, description: e.target.value })}
-                disabled={!isEditing}  // Permite edição apenas se isEditing for true
+              // Desabilita se estiver visualizando
               />
               <label>Atividades</label>
               <input
                 type="number"
                 value={newDaily.activities}
-                onChange={(e) => setNewDaily({ ...newDaily, activities: e.target.value })}
-                disabled={!isEditing}  // Permite edição apenas se isEditing for true
+                onChange={(e) => setNewDaily({ ...newDaily, activities: +e.target.value })}
+                min="0"
+                max="100"
+                required
+              // Desabilita se estiver visualizando
               />
               <label>Equipe</label>
               <input
                 type="number"
                 value={newDaily.team}
                 onChange={(e) => setNewDaily({ ...newDaily, team: e.target.value })}
-                disabled={!isEditing}  // Permite edição apenas se isEditing for true
+                min="0"
+                max="100"
+                required
+                d // Desabilita se estiver visualizando
               />
               <label>Comunicação</label>
               <input
                 type="number"
                 value={newDaily.communication}
                 onChange={(e) => setNewDaily({ ...newDaily, communication: e.target.value })}
-                disabled={!isEditing}  // Permite edição apenas se isEditing for true
+                min="0"
+                max="100"
+                required
+              // Desabilita se estiver visualizando
               />
               <label>Entrega</label>
               <input
                 type="number"
                 value={newDaily.delivery}
                 onChange={(e) => setNewDaily({ ...newDaily, delivery: e.target.value })}
-                disabled={!isEditing}  // Permite edição apenas se isEditing for true
+                min="0"
+                max="100"
+                required
+              // Desabilita se estiver visualizando
               />
-              {isEditing && <button type="submit">Atualizar Daily</button>}
+              <button type="submit">Salvar</button>
             </form>
-
-            {error && <p className="error-message">{error}</p>}
           </ModalContent>
         </ModalOverlay>
       )}

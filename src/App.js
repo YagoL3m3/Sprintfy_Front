@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, HashRouter } from 'react-router-dom';
 import './App.css';
 import Login from './features/Login';
 import Projetos from './features/Projetos';
@@ -11,7 +11,7 @@ import { AuthProvider } from './authContext'; // Importação do AuthProvider
 function App() {
   return (
     <AuthProvider> {/* Envolvendo o Router com o AuthProvider */}
-      <Router>
+      <HashRouter>
         <Routes>
           <Route path="/" element={<Login />} />
           <Route path="/Menu" element={<Menu />} />
@@ -21,7 +21,7 @@ function App() {
           <Route path="/criar-usuario" element={<CriarUsuario />} /> 
           <Route path="*" element={<h1>404 - Not Found</h1>} />
         </Routes>
-      </Router>
+      </HashRouter>
     </AuthProvider>
   );
 }
